@@ -49,7 +49,6 @@ def main():
     print("Your responses were recorded.")
     print("=" * 60)
 
-    # Optional: show what was chosen (no score yet)
     for r in responses:
         print("Q"+ str(r['id'])+ " | Topic: " + str(r['topic']) +" | You chose: " + str(r['chosen']))
 
