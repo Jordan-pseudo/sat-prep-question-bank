@@ -24,7 +24,7 @@ def ask_question(q, number):
         ans = input("\nYour answer (1-4): ").strip()
         if ans in {"1", "2", "3", "4"}:
             return choices[int(ans) - 1]
-        print("Please type 1, 2, 3, or 4.")
+        print("Please type 1, 2, 3, or 4.") 
 
 def main():
     questions = load_questions(QUESTIONS_PATH)
@@ -41,7 +41,8 @@ def main():
             "id": q["id"],
             "topic": q.get("topic"),
             "chosen": user_choice,
-            "correct": q["answer"]
+            "correct": q["answer"],
+            "explanation": q.get("explanation")
         })
 
     print("\n" + "=" * 60)
