@@ -26,6 +26,27 @@ def ask_question(q, number):
             return choices[int(ans) - 1]
         print("Please type 1, 2, 3, or 4.") 
 
+def score_responses(responses):
+    total = len(responses)
+    correct_count = 0
+    topic_stats = {}
+
+    for r in responses:
+        is_correct = r["chosen"] == r["correct"]
+        if is_correct:
+            correct_count += 1
+
+        topic = r["topic"]
+        if topic not in topic_stats:
+            topic_stats[topic] = {"correct": 0, "total": 0}
+
+        topic_stats[topic]["total"] += 1
+        if is_correct:
+            topic_stats[topic]["correct"] += 1
+
+    return correct_count, total, topic_stats
+
+
 def main():
     questions = load_questions(QUESTIONS_PATH)
 
@@ -46,12 +67,30 @@ def main():
         })
 
     print("\n" + "=" * 60)
-    print("Quiz complete! (Scoring comes tomorrow.)")
-    print("Your responses were recorded.")
-    print("=" * 60)
-
     for r in responses:
         print("Q"+ str(r['id'])+ " | Topic: " + str(r['topic']) +" | You chose: " + str(r['chosen']))
+
+    correct, total, topic_stats = score_responses(responses)
+    accuracy = (correct / total) * 100
+    print("\n" + "=" * 60)
+    print("Quiz Results")
+    print("=" * 60)
+    print(f"Score: {correct} / {total}")
+    print(f"Accuracy: {accuracy:.1f}%\n")
+
+    print("Performance by Topic:")
+    for topic, stats in topic_stats.items():
+        topic_accuracy = (stats["correct"] / stats["total"]) * 100
+        print(f"- {topic}: {topic_accuracy:.1f}% ({stats['correct']}/{stats['total']})")
+    
+    print("\nReview:")
+    for r in responses:
+        if r["chosen"] != r["correct"]:
+            print("-" * 60)
+            print(f"Question ID {r['id']}")
+            print(f"Your answer: {r['chosen']}")
+            print(f"Correct answer: {r['correct']}")
+            print(f"Explanation: {r['explanation']}")
 
 if __name__ == "__main__":
     main()
